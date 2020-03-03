@@ -1,5 +1,5 @@
 {
-  "name": "@kahirokunn/vuedts",
+  "name": "vuedts",
   "version": "1.3.1",
   "author": "kahirokunn",
   "description": "Generate TypeScript declaration files for .vue files",
@@ -23,7 +23,7 @@
     "url": "https://github.com/kahirokunn/vuedts.git"
   },
   "bin": {
-    "vuedts": "dist/bin/vuedts.js"
+    "vuedts": "./dist/bin/vuedts.js"
   },
   "scripts": {
     "prepublishOnly": "yarn lint && yarn test && yarn clean && yarn build",
@@ -58,10 +58,13 @@
     "vue-template-compiler": "^2.6.10"
   },
   "dependencies": {
+    "@types/fs-extra": "^8.1.0",
     "@types/glob-to-regexp": "^0.4.0",
     "chalk": "^3.0.0",
     "chokidar": "^3.3.0",
     "commander": "^4.0.1",
+    "escape-string-regexp": "^2.0.0",
+    "fs-extra": "^8.1.0",
     "glob": "^7.1.6",
     "glob-to-regexp": "^0.4.1",
     "promise.allsettled": "^1.0.1"

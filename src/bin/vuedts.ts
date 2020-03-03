@@ -6,16 +6,18 @@ import { globSync, deepestSharedRoot } from '../lib/file-util'
 import { findConfig, readConfig } from '../lib/config'
 import { generate } from '../lib/generate'
 import { watch } from '../lib/watch'
+import { getPathReplacer } from '../lib/out-root';
 
 // tslint:disable-next-line
 const meta = require('../../package.json')
 
 program
-  .version(meta.version)
-  .usage('<directory...>')
-  .option('-w, --watch', 'watch file changes')
-  .option('-c, --config <path>', 'pass your tsconfig.json path')
-  .parse(process.argv)
+    .version(meta.version)
+    .usage('<directory...>')
+    .option('-w, --watch', 'watch file changes')
+    .option('-c, --config <path>', 'pass your tsconfig.json path')
+    .option('-o, --outRoot <directory...>', 'output root (use with rootDirs)')
+    .parse(process.argv);
 
 function getConfig(configPath?: string) {
   let config: ReturnType<typeof readConfig>
@@ -65,9 +67,11 @@ function getConfig(configPath?: string) {
 if (program.args.length === 0) {
   program.help()
 } else {
-  const options = getConfig(program['config'])
+  const options = getConfig(program['config']);
   const files = globSync(program.args.map(arg => path.join(arg, '**/*.vue')))
   const targets = [...program.args, ...files]
+
+  getPathReplacer(options, program['outRoot']);
 
   if (program['watch']) {
     watch(targets, options)

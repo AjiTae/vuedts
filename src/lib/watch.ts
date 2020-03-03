@@ -4,6 +4,7 @@ import { writeFile, unlink } from './file-util'
 import { LanguageService } from './language-service'
 import { logEmitted, logRemoved, logError } from './logger'
 import { getTypeRootsDts } from './type-roots'
+import { pathReplacer } from './out-root';
 
 export function watch (
   dirs: string[],
@@ -46,16 +47,17 @@ export function watch (
 
 async function saveDts(fileName: string, service: LanguageService): Promise<void> {
   const dts = service.getDts(fileName)
-  const dtsName = `${fileName}${ts.Extension.Dts}`
+  let dtsName = `${fileName}${ts.Extension.Dts}`
 
   if (dts.errors.length > 0) {
-    logError(dtsName, dts.errors)
+    logError(fileName, dts.errors)
     return
   }
 
   if (dts.result === null) return
 
   try {
+    if(pathReplacer) dtsName = pathReplacer(dtsName);
     await writeFile(dtsName, dts.result)
     logEmitted(dtsName)
   } catch (e) {
@@ -64,8 +66,9 @@ async function saveDts(fileName: string, service: LanguageService): Promise<void
 }
 
 async function removeDts (fileName: string): Promise<void> {
-  const dtsName = `${fileName}${ts.Extension.Dts}`
+  let dtsName = `${fileName}${ts.Extension.Dts}`
   try {
+    if(pathReplacer) dtsName = pathReplacer(dtsName);
     await unlink(dtsName)
     logRemoved(dtsName)
   } catch (e) {

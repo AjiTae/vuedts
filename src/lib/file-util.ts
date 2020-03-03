@@ -2,6 +2,7 @@ import assert = require('assert')
 import path = require('path')
 import fs = require('fs')
 import glob = require('glob')
+import { outputFile } from 'fs-extra';
 
 export function readFileSync (filePath: string): string | undefined {
   try {
@@ -10,13 +11,17 @@ export function readFileSync (filePath: string): string | undefined {
     return undefined
   }
 }
-
+export function removeEmptyDir(path: string) {
+  return new Promise(resolve => fs.rmdir(path, err => {
+    resolve()
+  }));
+}
 export function readFile (filePath: string): Promise<string> {
   return exec(fs.readFile, filePath, 'utf8')
 }
 
 export function writeFile (filePath: string, data: string): Promise<void> {
-  return exec(fs.writeFile, filePath, data)
+  return exec(outputFile, filePath, data)
 }
 
 export function unlink (filePath: string): Promise<void> {

@@ -66,6 +66,37 @@ You can enable watch mode by adding `--watch` (shorthand `-w`) flag. In the watc
 vuedts --watch src/components
 ```
 
+### Output directory
+
+You can specify output directory for typings by adding `--outRoot <path>`,
+to separate declarations and files.
+
+#####project:
+```
+src/
+    components/
+        Component.vue
+```
+#####command:
+```bash
+vuedts --watch src/components -o generated-types
+```
+#####result:
+```
+generated-types/
+    components/
+        Component.d.ts
+src/
+    components/
+        Component.vue
+```
+Use `rootDirs` for declarations to be recognized.
+
+#####compilerOptions:
+```
+"rootDirs"": ["src", "generated-types"]
+```
+
 ## License
 
 MIT

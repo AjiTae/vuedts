@@ -6,6 +6,7 @@
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
+    "types" : ["mocha"],
     "lib": [
       "es2015",
       "dom"
